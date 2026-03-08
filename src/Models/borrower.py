@@ -1,11 +1,9 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class Borrower(BaseModel):
-
-    borrower_id: str
-    name: str
-    phone: str
-    emi_amount: int
+    name: str = Field(..., message="Name is required")
+    phone: str = Field(..., message="Phone is required")
+    emi_amount: int = Field(..., message="EMI amount is required")
     due_date: str
     days_past_due: int
     language: str

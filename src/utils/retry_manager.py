@@ -4,31 +4,30 @@ import os
 
 load_dotenv()
 
-MAX_CALL_RETRIES = int(os.getenv("MAX_CALL_RETRIES"))
+MAX_CALL_RETRIES = int(os.getenv("MAX_CALL_RETRIES", 3))
 
-def increment_retry(borrower_id):
 
+async def increment_retry(borrower_id: str) -> int:
+    """Increment retry count for a borrower. Returns new count."""
     key = f"retry:{borrower_id}"
-
-    count = redis_client.get(key)
+    count = await redis_client.get(key)
 
     if count is None:
-        redis_client.set(key, 1)
+        await redis_client.set(key, 1, ex=86400)  # expires in 24 hours
         return 1
 
-    count = int(count) + 1
-    redis_client.set(key, count)
+    new_count = int(count) + 1
+    await redis_client.set(key, new_count, ex=86400)
+    return new_count
 
-    return count
 
-
-def exceeded_retries(borrower_id):
-
+async def exceeded_retries(borrower_id: str) -> bool:
+    """Check if borrower has exceeded max retry attempts."""
     key = f"retry:{borrower_id}"
+    count = await redis_client.get(key)
+    return bool(count and int(count) >= MAX_CALL_RETRIES)
 
-    count = redis_client.get(key)
 
-    if count and int(count) >= MAX_CALL_RETRIES:
-        return True
-
-    return False
+async def reset_retries(borrower_id: str):
+    """Reset retry counter after successful commitment."""
+    await redis_client.delete(f"retry:{borrower_id}")

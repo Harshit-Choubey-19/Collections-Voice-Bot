@@ -1,0 +1,16 @@
+category,intent,user_query_example,bot_response,outcome_tag
+payment_commitment,will_pay,"I will pay tomorrow","Thank you for confirming. Could you please confirm the amount and date of payment?",PTP
+payment_commitment,will_pay,"I will clear the EMI today","Thank you for confirming the payment. Your commitment will be recorded.",PTP
+payment_commitment,pay_later,"I will pay next week","Thank you. Could you please confirm the exact date you will make the payment?",PTP
+financial_issue,financial_difficulty,"I am facing financial problems","I understand your situation. Would you like me to schedule a call with our support team to discuss possible options?",FINANCIAL_HARDSHIP
+financial_issue,financial_difficulty,"I lost my job","I'm sorry to hear that. I can escalate your case to our support team for assistance.",ESCALATED
+contact_issue,wrong_number,"Wrong number","Apologies for the inconvenience. I will mark this number as incorrect and update our records.",WRONG_NUMBER
+contact_issue,not_borrower,"I am not Rahul","Thank you for informing us. I will update our records accordingly.",WRONG_NUMBER
+callback_request,call_later,"Call me later","Sure. Please let me know a convenient time for a callback.",CALLBACK
+callback_request,call_later,"I am busy right now","No problem. I will schedule a callback at your preferred time.",CALLBACK
+payment_status,already_paid,"I already paid","Thank you for letting us know. I will update our system and verify the payment.",ALREADY_PAID
+payment_status,dispute,"I already cleared this EMI","Thank you for informing us. I will escalate this case for verification.",ESCALATED
+general_query,ask_due_amount,"How much do I need to pay","Your overdue EMI amount is ₹{emi_amount}. Please let me know when you will be able to make the payment.",INFO
+general_query,ask_due_date,"When was my payment due","Your EMI was due on {due_date}. It is currently overdue.",INFO
+conversation_end,end_call,"Okay thank you","Thank you for your time. Have a good day.",END
+conversation_end,end_call,"Bye","Thank you for speaking with us. Goodbye.",END

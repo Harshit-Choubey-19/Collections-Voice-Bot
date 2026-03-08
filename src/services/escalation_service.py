@@ -1,8 +1,9 @@
-def should_escalate(intent):
+ESCALATION_INTENTS = {
+    "FINANCIAL_DIFFICULTY",
+    "ABUSIVE",
+    "DISPUTE",
+}
 
-    escalation_cases = [
-        "FINANCIAL_DIFFICULTY",
-        "ABUSIVE"
-    ]
 
-    return intent in escalation_cases
+def should_escalate(intent: str) -> bool:
+    return intent in ESCALATION_INTENTS

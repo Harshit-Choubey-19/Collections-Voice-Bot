@@ -15,6 +15,7 @@ class Language(str, Enum):
 class Borrower(BaseModel):
     name: str = Field(..., description="Full name of borrower")
     phone: str = Field(..., description="Mobile number with country code")
+    dob: str = Field(..., description="Date of birth in YYYY-MM-DD format")
     emi_amount: float = Field(..., description="EMI amount in INR", gt=0)
     due_date: str = Field(..., description="EMI due date e.g. 2025-06-01")
     days_past_due: int = Field(..., description="Days past due (1-30)", ge=1, le=30)

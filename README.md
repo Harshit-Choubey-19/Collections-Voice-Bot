@@ -2,6 +2,13 @@
 
 A production-ready voice collections bot for NBFCs targeting borrowers 1–30 DPD (Days Past Due). Built on **FastAPI + MongoDB + Redis**, integrated with the **Inya voice platform** by Gnani.ai.
 
+# Demo Video Links
+
+```
+Youtube Link :- https://www.youtube.com/watch?v=UlADuBQMljo
+Drive Link :- https://drive.google.com/file/d/1Ooqz0vWxU-SM4BdtzCTgFCKmB0DKyTCU/view?usp=sharing
+```
+
 ---
 
 ## Table of Contents
@@ -47,10 +54,10 @@ A production-ready voice collections bot for NBFCs targeting borrowers 1–30 DP
 ┌─────────────────────────────────────────────────────────────────┐
 │                     FASTAPI BACKEND                             │
 │                                                                 │
-│  GET  /api/call/greeting    ← Dynamic Message 1 (greeting)      │
-│  POST /api/call/language    ← Dynamic Message 2 (lang select)   │
-│  POST /api/call/message     ← On-Call action (every turn)       │
-│  POST /api/call/end         ← Post-Call action (call end)       │
+│  GET  /call/greeting    ← Dynamic Message 1 (greeting)          │
+│  POST /call/language    ← Dynamic Message 2 (lang select)       │
+│  POST /call/message     ← On-Call action (every turn)           │
+│  POST /call/end         ← Post-Call action (call end)           │
 │                                                                 │
 │  ┌──────────────────┐   ┌──────────────┐   ┌───────────────┐    │
 │  │ conversation_    │   │ intent_      │   │ outcome_      │    │
@@ -81,13 +88,13 @@ A production-ready voice collections bot for NBFCs targeting borrowers 1–30 DP
 
 ```
 1. Inya dials borrower
-2. GET /api/call/greeting  → returns bilingual greeting text
+2. GET /call/greeting  → returns bilingual greeting text
 3. Borrower responds ("Hindi" / "Yes" / "English")
-4. POST /api/call/language → detects language, saves to MongoDB, returns EMI message
+4. POST /call/language → detects language, saves to MongoDB, returns EMI message
 5. Borrower responds to EMI message
-6. POST /api/call/message  → detects intent, returns next response
+6. POST /call/message  → detects intent, returns next response
 7. Steps 5–6 repeat until call resolves
-8. POST /api/call/end      → logs outcome + sentiment to MongoDB
+8. POST /call/end      → logs outcome + sentiment to MongoDB
 ```
 
 ---
@@ -149,6 +156,7 @@ src/
   "_id": ObjectId,           # MongoDB auto-generated, used as borrower_id
   "name": str,               # Full name
   "phone": str,              # Mobile number
+  "dob": str,
   "emi_amount": float,       # EMI amount in INR
   "due_date": str,           # Due date e.g. "2025-06-01"
   "days_past_due": int,      # 1–30 DPD

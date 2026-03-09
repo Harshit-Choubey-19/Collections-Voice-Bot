@@ -32,6 +32,8 @@ def analyze_sentiment(intent_history: list, outcome: str) -> dict:
 
 async def log_call_outcome(data: dict):
     """Log structured call outcome + sentiment to MongoDB."""
+    print(f"[LOG_OUTCOME] Called with: borrower_id={data.get('borrower_id')} outcome={data.get('outcome')} call_id={data.get('call_id')}")
+
     intent_history = data.get("intent_history", [])
     outcome = data.get("outcome", "UNKNOWN")
     sentiment = analyze_sentiment(intent_history, outcome)
@@ -51,8 +53,12 @@ async def log_call_outcome(data: dict):
         "timestamp": datetime.utcnow(),
     }
 
-    await call_logs_collection.insert_one(record)
-    print(f"[OUTCOME] Logged: {outcome} | Sentiment: {sentiment} | borrower: {data.get('borrower_id')}")
+    try:
+        result = await call_logs_collection.insert_one(record)
+        print(f"[OUTCOME] Inserted _id={result.inserted_id} | outcome={outcome} | borrower={data.get('borrower_id')}")
+    except Exception as e:
+        print(f"[OUTCOME ERROR] Failed to insert call log: {str(e)}")
+        return
 
     if outcome == "COMMITTED" and data.get("commitment_date"):
         await commitments_collection.insert_one({

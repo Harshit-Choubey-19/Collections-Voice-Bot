@@ -1,26 +1,51 @@
 import re
 from typing import Tuple
 
-# ─── Intent keyword maps (expand as needed per language) ──────────────────────
-
 INTENT_PATTERNS = {
+    "YES": [
+        r"\byes\b", r"\byeah\b", r"\bya\b", r"\byep\b",
+        r"\bhaan\b", r"\bhaa\b", r"\bha\b", r"\bji\b",
+        r"\bji haan\b", r"\bji ha\b",
+        r"\bcorrect\b", r"\bright\b", r"\bspeaking\b",
+        r"\bthats me\b", r"\bthat's me\b",
+        r"\bok\b", r"\bokay\b",              # people often say "ok" to confirm
+    ],
+    "NO": [
+        r"\bno\b", r"\bnope\b",
+        r"\bnahi\b", r"\bnahin\b", r"\bnaa\b",
+        r"\bnot me\b", r"\bwrong\b",
+        r"\bwrong number\b",
+    ],
+    "LANG_HINDI": [
+        r"\bhindi\b",
+        r"\bhindi mein\b",
+        r"\bhindi chahiye\b",
+        r"\bhindi bolna\b",
+        r"\bmujhe hindi\b",
+    ],
+    "LANG_ENGLISH": [
+        r"\benglish\b",
+        r"\benglish mein\b",
+        r"\benglish chahiye\b",
+        r"\bi want english\b",
+    ],
     "PAY_NOW": [
         r"\bpay(ing)?\s*(now|today|right now|immediately)\b",
         r"\bpayment\s*(done|complete|ready)\b",
         r"\bi('ll| will) pay (now|today)\b",
-        r"\aaj (de|pay|bhar)\b",           # Hindi: today give/pay
+        r"\baaj (de|pay|bhar)\b",
     ],
     "PAY_LATER": [
         r"\btomorrow\b", r"\bnext week\b", r"\bfew days\b",
         r"\bafter\s*(salary|weekend|month)\b",
-        r"\bkal\b", r"\bparso\b",           # Hindi: tomorrow, day after
+        r"\bkal\b", r"\bparso\b",
         r"\bwill pay\b", r"\bpay by\b",
     ],
     "FINANCIAL_DIFFICULTY": [
         r"\bno money\b", r"\bfinancial (problem|crisis|trouble|difficulty)\b",
         r"\bcan('t| not) (pay|afford)\b",
         r"\blost (job|work)\b", r"\bunemployed\b",
-        r"\bpaisa nahi\b",                  # Hindi: no money
+        r"\bpaisa nahi\b",
         r"\bmedical (emergency|expense)\b",
     ],
     "CALLBACK_REQUESTED": [
@@ -32,7 +57,7 @@ INTENT_PATTERNS = {
     "WRONG_NUMBER": [
         r"\bwrong number\b", r"\bno such (person|borrower)\b",
         r"\bi('m| am) not\s+\w+\b",
-        r"\bgalat number\b",               # Hindi: wrong number
+        r"\bgalat number\b",
     ],
     "ABUSIVE": [
         r"\bstop calling\b", r"\bdo not call\b", r"\bdon't call\b",
@@ -44,25 +69,19 @@ INTENT_PATTERNS = {
         r"\bnot my loan\b", r"\bdispute\b",
     ],
     "CONFIRM_DATE": [
-       r"\b(will pay|pay|paying)\s+(on|by)\s+\d{1,2}",          # "pay by 15"
-       r"\b\d{1,2}(st|nd|rd|th)?\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)",  # "15th June"
-       r"\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b",
-       r"\b\d{1,2}[/-]\d{1,2}\b",                                # "15/06"
-       r"\bnext (monday|tuesday|wednesday|thursday|friday)\b",
+        r"\b(will pay|pay|paying)\s+(on|by)\s+\d{1,2}",
+        r"\b\d{1,2}(st|nd|rd|th)?\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)",
+        r"\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b",
+        r"\b\d{1,2}[/-]\d{1,2}\b",
+        r"\bnext (monday|tuesday|wednesday|thursday|friday)\b",
     ],
 }
 
 
 def detect_intent(text: str) -> Tuple[str, float]:
-    """
-    Returns (intent, confidence_score).
-    confidence_score is simple: 1.0 for direct match, 0.5 for fallback.
-    """
     text_lower = text.lower().strip()
-
     for intent, patterns in INTENT_PATTERNS.items():
         for pattern in patterns:
             if re.search(pattern, text_lower):
                 return intent, 1.0
-
     return "UNKNOWN", 0.5

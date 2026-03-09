@@ -598,12 +598,12 @@ ngrok http 8000
 ### Add a Test Borrower
 
 ```
-POST http://localhost:8000/api/borrower
+POST http://localhost:8000/borrower
 Content-Type: application/json
 
 {
   "name": "Harshit Choubey",
-  "phone": "+919876543210",
+  "phone": "+911234567890,
   "emi_amount": 5000,
   "due_date": "2025-05-01",
   "days_past_due": 15,
@@ -616,13 +616,13 @@ Copy the `_id` from response — use it as `borrower_id` in Inya Pre-call Variab
 ### Test Greeting
 
 ```
-GET http://localhost:8000/api/call/greeting?borrower_id=<_id>&call_id=test_01
+GET http://localhost:8000/call/greeting?borrower_id=<_id>&call_id=test_01
 ```
 
 ### Test Language Selection
 
 ```
-POST http://localhost:8000/api/call/language
+POST http://localhost:8000/call/language
 Content-Type: application/json
 
 { "borrower_id": "<_id>", "call_id": "test_01", "text": "Hindi" }
@@ -631,7 +631,7 @@ Content-Type: application/json
 ### Test Conversation Turn
 
 ```
-POST http://localhost:8000/api/call/message
+POST http://localhost:8000/call/message
 Content-Type: application/json
 
 { "borrower_id": "<_id>", "call_id": "test_01", "text": "I will pay by 15th June" }
@@ -640,7 +640,7 @@ Content-Type: application/json
 ### Test Call End
 
 ```
-POST http://localhost:8000/api/call/end
+POST http://localhost:8000/call/end
 Content-Type: application/json
 
 { "borrower_id": "<_id>", "call_id": "test_01", "event": "call_ended" }
@@ -649,7 +649,7 @@ Content-Type: application/json
 ### Check Call History
 
 ```
-GET http://localhost:8000/api/call/history/<_id>
+GET http://localhost:8000/call/history/<_id>
 ```
 
 ---

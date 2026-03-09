@@ -156,11 +156,12 @@ src/
   "_id": ObjectId,           # MongoDB auto-generated, used as borrower_id
   "name": str,               # Full name
   "phone": str,              # Mobile number
-  "dob": str,
+  "dob": str,                # DOB (another way for verification)
   "emi_amount": float,       # EMI amount in INR
   "due_date": str,           # Due date e.g. "2025-06-01"
   "days_past_due": int,      # 1–30 DPD
   "language": str            # "en" or "hi" — updated during call
+  "loan_account_number": str # Used for verification
 }
 ```
 
